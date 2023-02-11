@@ -1,0 +1,63 @@
+{
+  "name": "circle-of-life-and-death",
+  "version": "1.0.0",
+  "description": "Melodies constructed genetically.",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:jimkang/circle-of-life-and-death.git"
+  },
+  "keywords": [],
+  "author": "Jim Kang",
+  "license": "Polyform Noncommercial License 1.0",
+  "bugs": {
+    "url": "https://github.com/jimkang/circle-of-life-and-death/issues"
+  },
+  "homepage": "https://github.com/jimkang/circle-of-life-and-death",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^19.0.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.0.0",
+    "@rollup/plugin-typescript": "^10.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.46.1",
+    "@typescript-eslint/parser": "^5.46.1",
+    "eslint": "^7.24.0",
+    "lodash.curry": "^4.1.1",
+    "minimist": "^1.2.0",
+    "prettier": "^2.8.3",
+    "rollup": "^2.50.6",
+    "rollup-plugin-livereload": "^2.0.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "sirv-cli": "^1.0.12",
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "@jimkang/randomid": "^1.0.2",
+    "accessor": "^3.0.0",
+    "audio-context-singleton": "^1.0.3",
+    "audiobuffer-to-wav": "^1.0.0",
+    "basic-browser-request": "^9.0.2",
+    "call-next-tick": "^2.0.1",
+    "d3-array": "^2.4.0",
+    "d3-queue": "^3.0.7",
+    "d3-selection": "^3.0.0",
+    "d3-transition": "^1.3.2",
+    "d3-zoom": "^3.0.0",
+    "data-joiner": "^1.0.0",
+    "errorback-promise": "^1.0.0",
+    "get-at-path": "^1.0.1",
+    "handle-error-web": "^1.0.1",
+    "lodash.clonedeep": "^4.5.0",
+    "oknok": "^3.0.0",
+    "one-listener-per-element": "^1.0.1",
+    "probable": "^2.1.4",
+    "request-body-mover": "^1.0.1",
+    "route-state": "^2.0.5",
+    "seedrandom": "^3.0.5"
+  }
+}
