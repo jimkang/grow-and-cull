@@ -52,11 +52,12 @@ async function followRoute({
 
   var ctx = values[0];
   var mainGroupScoreStateObjects: ScoreState[] = composeGeneticParts({
-    numberOfParts: 3,
+    numberOfParts: 5,
     seed,
     tempoFactor,
     totalTicks,
   });
+  console.log('mainGroupScoreStateObjects:', mainGroupScoreStateObjects);
   const totalSeconds = mainGroupScoreStateObjects.reduce(
     (total, direction) => total + direction.tickLength,
     0

@@ -38,3 +38,6 @@ export interface PlayEvent {
   started: boolean;
   rest?: boolean;
 }
+
+export type Riff = number[];
+export type RiffStack = Riff[];
