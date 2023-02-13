@@ -30,8 +30,12 @@ export function composeGeneticParts({
     const prevIndex = genIndex - 1;
     const cull = genIndex % 2 === 0;
     if (prevIndex < 0) {
-      // 0th generation is just the initial riff repeated across all parts.
-      return [range(numberOfParts).map(() => initialRiff.slice())];
+      // 0th generation is just the initial riff in the main voice and rests in the others.
+      return [
+        [initialRiff].concat(
+          range(numberOfParts - 1).map(() => initialRiff.map(() => undefined))
+        ),
+      ];
     }
 
     var prevGen = gens[prevIndex];
