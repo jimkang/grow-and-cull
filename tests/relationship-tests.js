@@ -26,6 +26,72 @@ var testCases = [
       },
     ],
   },
+  {
+    name: 'Five pitches',
+    opts: [0.05, 0.17, 0.96, 0.15, 0.74],
+    expected: [
+      {
+        pair: [0.05, 0.17],
+        ratio: { numerator: 0.05, denominator: 0.17 },
+        closestDiamondRatio: { numerator: 1, denominator: 2 },
+        distance: 0.20588235294117646,
+      },
+      {
+        pair: [0.05, 0.96],
+        ratio: { numerator: 0.05, denominator: 0.96 },
+        closestDiamondRatio: { numerator: 1, denominator: 2 },
+        distance: 0.4479166666666667,
+      },
+      {
+        pair: [0.05, 0.15],
+        ratio: { numerator: 0.05, denominator: 0.15 },
+        closestDiamondRatio: { numerator: 1, denominator: 2 },
+        distance: 0.16666666666666663,
+      },
+      {
+        pair: [0.05, 0.74],
+        ratio: { numerator: 0.05, denominator: 0.74 },
+        closestDiamondRatio: { numerator: 1, denominator: 2 },
+        distance: 0.43243243243243246,
+      },
+      {
+        pair: [0.17, 0.96],
+        ratio: { numerator: 0.17, denominator: 0.96 },
+        closestDiamondRatio: { numerator: 1, denominator: 2 },
+        distance: 0.32291666666666663,
+      },
+      {
+        pair: [0.15, 0.17],
+        ratio: { numerator: 0.15, denominator: 0.17 },
+        closestDiamondRatio: { numerator: 8, denominator: 9 },
+        distance: 0.0065359477124183885,
+      },
+      {
+        pair: [0.17, 0.74],
+        ratio: { numerator: 0.17, denominator: 0.74 },
+        closestDiamondRatio: { numerator: 1, denominator: 2 },
+        distance: 0.2702702702702703,
+      },
+      {
+        pair: [0.15, 0.96],
+        ratio: { numerator: 0.15, denominator: 0.96 },
+        closestDiamondRatio: { numerator: 1, denominator: 2 },
+        distance: 0.34375,
+      },
+      {
+        pair: [0.74, 0.96],
+        ratio: { numerator: 0.74, denominator: 0.96 },
+        closestDiamondRatio: { numerator: 10, denominator: 13 },
+        distance: 0.0016025641025640969,
+      },
+      {
+        pair: [0.15, 0.74],
+        ratio: { numerator: 0.15, denominator: 0.74 },
+        closestDiamondRatio: { numerator: 1, denominator: 2 },
+        distance: 0.2972972972972973,
+      },
+    ],
+  },
 ];
 
 testCases.forEach(runTest);
