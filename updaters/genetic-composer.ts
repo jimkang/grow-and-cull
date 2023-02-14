@@ -58,14 +58,14 @@ export function composeGeneticParts({
     } else {
       for (let i = 0; i < numberOfGrowRiffsPerGrowthPeriodRiff; ++i) {
         gen = gen.slice();
-        if (genIndex % 4 === 0) {
-          const changeFactor = prob.pick(guideDiamond.tonalityDiamondPitches);
-          if (prob.roll(2) === 0) {
-            gen[0] = gen[0].map((pitch) => pitch / changeFactor);
-          } else {
-            gen[0] = gen[0].map((pitch) => pitch * changeFactor);
-          }
-        }
+        //if (genIndex % 4 === 0) {
+        //const changeFactor = prob.pick(guideDiamond.tonalityDiamondPitches);
+        //if (prob.roll(2) === 0) {
+        //gen[0] = gen[0].map((pitch) => pitch / changeFactor);
+        //} else {
+        //gen[0] = gen[0].map((pitch) => pitch * changeFactor);
+        //}
+        //}
         gen.forEach(growInRiffHoles);
         //gen.push(growNewRiff(gen[0].length));
         gens.push(gen);

@@ -1,20 +1,7 @@
 //var SoundbankReverb = require('soundbank-reverb');
 
 var adsrCurve = new Float32Array([
-  0,
-  0.5,
-  1,
-  1,
-  1,
-  1,
-  0.95,
-  0.9,
-  0.8,
-  0.72,
-  0.6,
-  0.3,
-  0.1,
-  0
+  0, 0.2, 0.6, 1, 1, 1, 0.95, 0.9, 0.8, 0.72, 0.6, 0.3, 0.1, 0,
 ]);
 //var asCurve = adsrCurve.slice(0, 3);
 
@@ -94,13 +81,18 @@ export class Envelope extends SynthNode {
     if (params.envelopeLengthProportionToEvent) {
       this.envelopeLength *= params.envelopeLengthProportionToEvent;
     }
-    this.playCurve = 
-      (params.playCurve ? params.playCurve : adsrCurve).map(x => x * this.params.envelopeMaxGain);
+    this.playCurve = (params.playCurve ? params.playCurve : adsrCurve).map(
+      (x) => x * this.params.envelopeMaxGain
+    );
   }
   play({ startTime }) {
     this.node.gain.value = 0;
     //this.node.gain.setValueCurveAtTime(adsrCurve, startTime, envelopeLength);
-    this.node.gain.setValueCurveAtTime(this.playCurve, startTime, this.envelopeLength);
+    this.node.gain.setValueCurveAtTime(
+      this.playCurve,
+      startTime,
+      this.envelopeLength
+    );
     this.envelopeCompletionTime = startTime + this.envelopeLength;
   }
   linearRampTo(fadeSeconds, value) {
@@ -186,5 +178,3 @@ export class Panner extends SynthNode {
   }
   play() {}
 }
-
-
