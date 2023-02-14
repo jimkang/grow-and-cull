@@ -9,6 +9,9 @@ import {
   getPossibleRelationships,
   compareWorseness,
 } from '../tasks/relationships';
+import { TonalityDiamond } from '../tonality-diamond';
+
+var { diamondRatios } = TonalityDiamond(11);
 
 export function composeGeneticParts({
   numberOfParts,
@@ -72,7 +75,7 @@ export function composeGeneticParts({
   function cullPitchesInChordsAcrossRiffstack(riffStack: RiffStack) {
     for (let eventIndex = 0; eventIndex < riffStack[0].length; ++eventIndex) {
       let chord = riffStack.map((riff) => riff[eventIndex]);
-      let relationships = getPossibleRelationships(chord);
+      let relationships = getPossibleRelationships({ diamondRatios, chord });
       console.log('relationships', relationships);
       // TODO: Do threshold-based thing instead of top-n?
       relationships.sort(compareWorseness);

@@ -1,10 +1,13 @@
 var test = require('tape');
 var { getPossibleRelationships } = require('../tasks/relationships.ts');
+import { TonalityDiamond } from '../tonality-diamond';
+
+var { diamondRatios } = TonalityDiamond(11);
 
 var testCases = [
   {
     name: 'Simple',
-    opts: [1, 1.5, 3],
+    opts: { diamondRatios, chord: [1, 1.5, 3] },
     expected: [
       {
         pair: [1, 1.5],
@@ -34,7 +37,7 @@ var testCases = [
   },
   {
     name: 'Five pitches',
-    opts: [0.05, 0.17, 0.96, 0.15, 0.74],
+    opts: { diamondRatios, chord: [0.05, 0.17, 0.96, 0.15, 0.74] },
     expected: [
       {
         pair: [0.05, 0.17],
@@ -104,9 +107,9 @@ var testCases = [
         pair: [0.74, 0.96],
         chordIndexes: [2, 4],
         ratio: { numerator: 0.74, denominator: 0.96 },
-        closestDiamondRatio: { numerator: 10, denominator: 13 },
-        distance: 0.0016025641025640969,
-        weightedDistance: 0.02083333333333326,
+        closestDiamondRatio: { numerator: 7, denominator: 9 },
+        distance: 0.00694444444444442,
+        weightedDistance: 0.06249999999999978,
       },
       {
         pair: [0.15, 0.74],

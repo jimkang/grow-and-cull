@@ -1,9 +1,14 @@
 import { Relationship, Ratio } from '../types';
-import { diamondRatios } from '../tonality-diamond';
 import { factorDown } from './factors';
 import curry from 'lodash.curry';
 
-export function getPossibleRelationships(chord: number[]): Relationship[] {
+export function getPossibleRelationships({
+  diamondRatios,
+  chord,
+}: {
+  diamondRatios: Ratio[];
+  chord: number[];
+}): Relationship[] {
   return chord.reduce(addRelationships, []);
 
   function addRelationships(
@@ -17,7 +22,7 @@ export function getPossibleRelationships(chord: number[]): Relationship[] {
       let ratioObj = factorDown({ numerator: pair[0], denominator: pair[1] });
       let { closestDiamondRatio, distance, weightedDistance } =
         diamondRatios.reduce(curry(compareRatio)(ratioObj), {
-          platonicRatio: Infinity,
+          closestDiamondRatio: { numerator: Infinity, denominator: Infinity },
           distance: Infinity,
           weightedDistance: Infinity,
         });
