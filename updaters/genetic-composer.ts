@@ -1,24 +1,23 @@
-import { tonalityDiamondPitches } from '../tonality-diamond';
 import { range } from 'd3-array';
 //import { scaleLinear } from 'd3-scale';
 import { createProbable as Probable } from 'probable';
 import seedrandom from 'seedrandom';
-import {
-  ScoreState,
-  ScoreEvent,
-  Riff,
-  RiffStack,
-  Relationship,
-} from '../types';
+import { ScoreState, ScoreEvent, Riff, RiffStack } from '../types';
 import curry from 'lodash.curry';
 import cloneDeep from 'lodash.clonedeep';
-import { getPossibleRelationships } from '../tasks/relationships';
+import {
+  getPossibleRelationships,
+  compareWorseness,
+} from '../tasks/relationships';
 
 export function composeGeneticParts({
   numberOfParts,
   seed,
   tempoFactor,
-  initialRiff = [1, 1, ((16 / 9) * 1) / 2, 6 / 5, 1],
+  // The decimals are a stupid hack to avoid having to change the director's
+  // behavior, which only plays new events if the pitch is different from
+  // what's already played.
+  initialRiff = [1, 0.999, ((16 / 9) * 1) / 2, 6 / 5, 1.001],
   numberOfGenerations = 4,
 }): ScoreState[] {
   var prob = Probable({ random: seedrandom(seed) });
@@ -64,13 +63,13 @@ export function composeGeneticParts({
       let relationships = getPossibleRelationships(chord);
       console.log('relationships', relationships);
       // TODO: Do threshold-based thing instead of top-n?
-      //relationships.sort(comparePlatonicness);
-      //bestRelationship = relationships[0];
-      //bestRelationship.sort(compareOffness);
-      //for (let i = 0; i < 2; i++) {
-      //// TODO: Don't cull them if they're "good enough".
-      //riffStack[bestRelationship[i].chordIndex][eventIndex] = undefined;
-      //}
+      relationships.sort(compareWorseness);
+      for (let i = 0; i < Math.min(2, relationships.length); ++i) {
+        let rel = relationships[i];
+        // TODO: Don't cull them if they're "good enough".
+        riffStack[rel.chordIndexes[0]][eventIndex] = undefined;
+        riffStack[rel.chordIndexes[1]][eventIndex] = undefined;
+      }
     }
   }
 
@@ -84,11 +83,26 @@ export function composeGeneticParts({
   }
 
   function getStatesForRiffStack(riffStack: RiffStack): ScoreState[] {
-    return range(riffStack.length).map((eventIndex) => ({
-      events: riffStack.map(curry(getEventFromRiff)(eventIndex)),
-      tickIndex: eventIndex,
+    var states: ScoreState[] = range(riffStack.length).map((eventIndex) => {
+      let state: ScoreState = {
+        events: riffStack.map(curry(getEventFromRiff)(eventIndex)),
+        tickIndex: eventIndex,
+        tickLength: tempoFactor * 1,
+      };
+      return state;
+    });
+    // Add a pause at the end of each riff.
+    states.push({
+      events: riffStack.map(() => ({
+        rest: true,
+        rate: 1,
+        delay: 0,
+        peakGain: 0,
+      })),
+      tickIndex: 0,
       tickLength: tempoFactor * 1,
-    }));
+    });
+    return states;
   }
 
   function getEventFromRiff(eventIndex, riff, riffIndex, riffs): ScoreEvent {

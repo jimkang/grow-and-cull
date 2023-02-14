@@ -8,7 +8,7 @@ import { Ticker } from './updaters/ticker';
 import { SampleDownloader } from './tasks/sample-downloader';
 import RandomId from '@jimkang/randomid';
 import { ScoreDirector } from './updaters/score-director';
-import { defaultSecondsPerTick, sampleFilenames } from './consts';
+import { defaultSecondsPerTick, sampleFilenames, ticksPerRiff } from './consts';
 import { composeGeneticParts } from './updaters/genetic-composer';
 import { renderEventDirection } from './renderers/render-event-direction';
 import { ScoreState } from './types';
@@ -34,7 +34,7 @@ var mainScoreDirector;
 
 async function followRoute({
   seed,
-  totalTicks,
+  genCount = 100,
   tempoFactor = defaultSecondsPerTick,
   startTick = 0,
   sampleIndex = 0,
@@ -43,6 +43,8 @@ async function followRoute({
     routeState.addToRoute({ seed: randomId(8) });
     return;
   }
+
+  const totalTicks = genCount * ticksPerRiff;
 
   var { error, values } = await ep(getCurrentContext);
   if (error) {
@@ -55,7 +57,7 @@ async function followRoute({
     numberOfParts: 5,
     seed,
     tempoFactor,
-    totalTicks,
+    numberOfGenerations: genCount,
   });
   console.log('mainGroupScoreStateObjects:', mainGroupScoreStateObjects);
   const totalSeconds = mainGroupScoreStateObjects.reduce(
@@ -104,6 +106,7 @@ async function followRoute({
       mainOutNode,
       constantEnvelopeLength: 1.0,
       envelopeCurve: new Float32Array([0, 0.5, 1]),
+      fadeLengthFactor: 2,
     });
 
     wireControls({

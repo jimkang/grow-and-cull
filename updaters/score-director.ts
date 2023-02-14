@@ -259,7 +259,8 @@ function fadeToDeath(defaultFadeSeconds: number, playEvent: PlayEvent) {
   if (isNaN(fadeSeconds)) {
     fadeSeconds = defaultFadeSeconds;
   }
-  if (!playEvent.rest) {
+  // TODO: Check to see if a ramp is still going.
+  if (!playEvent.rest && fadeSeconds > 1) {
     console.log('Fading', playEvent.scoreEvent.rate);
     var envelopeNode: Envelope = playEvent.nodes.find(
       (node) => node instanceof Envelope

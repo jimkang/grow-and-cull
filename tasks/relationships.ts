@@ -87,3 +87,10 @@ function ratioToSingleNumber(ratio: Ratio): number {
 function invertRatio(ratio: Ratio): Ratio {
   return { numerator: ratio.denominator, denominator: ratio.numerator };
 }
+
+export function compareWorseness(a: Relationship, b: Relationship) {
+  if (a.weightedDistance > b.weightedDistance) {
+    return -1;
+  }
+  return 1;
+}
