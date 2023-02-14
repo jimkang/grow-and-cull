@@ -52,4 +52,5 @@ export interface Relationship {
   ratio: Ratio;
   closestDiamondRatio: Ratio;
   distance: number;
+  weightedDistance: number;
 }

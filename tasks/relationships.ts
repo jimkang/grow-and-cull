@@ -15,16 +15,19 @@ export function getPossibleRelationships(chord: number[]): Relationship[] {
       const otherPitch = chord[i];
       let pair = [pitch, otherPitch].sort(compareNumbers);
       let ratioObj = factorDown({ numerator: pair[0], denominator: pair[1] });
-      let { closestDiamondRatio, distance } = diamondRatios.reduce(
-        curry(compareRatio)(ratioObj),
-        { platonicRatio: Infinity, distance: Infinity }
-      );
+      let { closestDiamondRatio, distance, weightedDistance } =
+        diamondRatios.reduce(curry(compareRatio)(ratioObj), {
+          platonicRatio: Infinity,
+          distance: Infinity,
+          weightedDistance: Infinity,
+        });
 
       let rel: Relationship = {
         pair,
         ratio: ratioObj,
         closestDiamondRatio,
         distance,
+        weightedDistance,
       };
       rels.push(rel);
     }
@@ -39,7 +42,7 @@ function compareNumbers(a, b) {
 
 function compareRatio(
   ratio: Ratio,
-  { closestDiamondRatio, distance },
+  { closestDiamondRatio, distance, weightedDistance },
   diamondRatio: Ratio
 ) {
   const diamondRatioSingleNumber = ratioToSingleNumber(diamondRatio);
@@ -67,9 +70,13 @@ function compareRatio(
   //diamondRatio
   //);
   if (currentDistance < distance) {
-    return { closestDiamondRatio: diamondRatio, distance: currentDistance };
+    return {
+      closestDiamondRatio: diamondRatio,
+      distance: currentDistance,
+      weightedDistance: currentDistance * diamondRatio.denominator,
+    };
   }
-  return { closestDiamondRatio, distance };
+  return { closestDiamondRatio, distance, weightedDistance };
 }
 
 function ratioToSingleNumber(ratio: Ratio): number {
