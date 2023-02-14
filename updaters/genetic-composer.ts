@@ -22,7 +22,8 @@ export function composeGeneticParts({
   numberOfTimesToPlayCullRiff = 3,
   numberOfTimesToPlayGrowRiff = 2,
 }): ScoreState[] {
-  var prob = Probable({ random: seedrandom(seed) });
+  var random = seedrandom(seed);
+  var prob = Probable({ random });
 
   var riffStacks = range(numberOfGenerations).reduce(
     getNextGenerationOfRiffs,
@@ -35,29 +36,33 @@ export function composeGeneticParts({
     gens: RiffStack[],
     genIndex: number
   ): RiffStack[] {
-    const prevIndex = genIndex - 1;
+    const prevIndex = gens.length - 1;
     const cull = genIndex % 2 === 0;
+
     if (prevIndex < 0) {
       // 0th generation is just the initial riff in the main voice and rests in the others.
-      return [
-        [initialRiff].concat(
-          range(numberOfParts - 1).map(() => initialRiff.map(() => undefined))
-        ),
-      ];
+      for (let i = 0; i < numberOfTimesToPlayCullRiff; ++i) {
+        gens.push(
+          [initialRiff.slice()].concat(
+            range(numberOfParts - 1).map(() => initialRiff.map(() => undefined))
+          )
+        );
+      }
+      return gens;
     }
 
-    var prevGen = gens[prevIndex];
-    var gen = cloneDeep(prevGen);
+    var prevGenInstance = gens[prevIndex];
+    var gen = cloneDeep(prevGenInstance);
 
     if (cull) {
       cullPitchesInChordsAcrossRiffstack(gen);
       for (let i = 0; i < numberOfTimesToPlayCullRiff; ++i) {
-        gens.push(gen);
+        gens.push(gen.slice());
       }
     } else {
       gen.forEach(growInRiffHoles);
       for (let i = 0; i < numberOfTimesToPlayGrowRiff; ++i) {
-        gens.push(gen);
+        gens.push(gen.slice());
       }
     }
 

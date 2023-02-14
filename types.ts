@@ -25,6 +25,7 @@ export interface ScoreEvent {
   loop?: Loop;
   meta?: EventMetadata;
   rest?: boolean;
+  id?: string;
 }
 
 export interface EventMetadata {

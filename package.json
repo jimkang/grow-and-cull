@@ -38,7 +38,7 @@
     "typescript": "^4.9.4"
   },
   "dependencies": {
-    "@jimkang/randomid": "^1.0.2",
+    "@jimkang/randomid": "^1.1.0",
     "accessor": "^3.0.0",
     "audio-context-singleton": "^1.0.3",
     "audiobuffer-to-wav": "^1.0.0",

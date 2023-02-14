@@ -18,7 +18,7 @@ export function ScoreDirector({
   sampleBuffer,
   mainOutNode,
   ampFactor = 1.0,
-  fadeLengthFactor = 2.0,
+  fadeLengthFactor = 1.0,
   envelopeLengthFactor = 1.0,
   constantEnvelopeLength = undefined,
   envelopeCurve = null,

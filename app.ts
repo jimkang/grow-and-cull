@@ -16,7 +16,7 @@ import {
 } from './consts';
 import { composeGeneticParts } from './updaters/genetic-composer';
 import { renderEventDirection } from './renderers/render-event-direction';
-import { ScoreState } from './types';
+import { ScoreState, ScoreEvent } from './types';
 import { MainOut } from './updaters/main-out';
 
 var randomId = RandomId();
@@ -64,6 +64,13 @@ async function followRoute({
     tempoFactor,
     numberOfGenerations: genCount,
   });
+  // This is a hacky way to get every event to play without having to change how ScoreDirector works.
+  mainGroupScoreStateObjects.forEach((state: ScoreState) =>
+    state.events.forEach((event: ScoreEvent) => {
+      event.id = randomId(4) + '-' + event.rate.toFixed(5);
+    })
+  );
+
   console.log('mainGroupScoreStateObjects:', mainGroupScoreStateObjects);
   const totalSeconds = mainGroupScoreStateObjects.reduce(
     (total, direction) => total + direction.tickLength,
@@ -111,7 +118,10 @@ async function followRoute({
       mainOutNode,
       constantEnvelopeLength: 1.0,
       envelopeCurve: new Float32Array([0, 0.5, 1]),
-      fadeLengthFactor: 2,
+      fadeLengthFactor: 1,
+      idScoreEvent(event) {
+        return event.id;
+      },
     });
 
     wireControls({
