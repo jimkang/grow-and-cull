@@ -7,23 +7,21 @@ import curry from 'lodash.curry';
 import cloneDeep from 'lodash.clonedeep';
 import {
   getPossibleRelationships,
-  compareWorseness,
+  compareGoodness,
 } from '../tasks/relationships';
 import { TonalityDiamond } from '../tonality-diamond';
 
-var { diamondRatios } = TonalityDiamond(11);
+var selectionDiamond = TonalityDiamond(6);
+var guideDiamond = TonalityDiamond(5);
 
 export function composeGeneticParts({
   numberOfParts,
   seed,
   tempoFactor,
-  // The decimals are a stupid hack to avoid having to change the director's
-  // behavior, which only plays new events if the pitch is different from
-  // what's already played.
-  initialRiff = [1, 0.999, ((16 / 9) * 1) / 2, 6 / 5, 1.001],
+  //initialRiff = [1, 1, ((16 / 9) * 1) / 2, 6 / 5, 1],
   numberOfGenerations = 4,
-  numberOfTimesToPlayCullRiff = 3,
-  numberOfTimesToPlayGrowRiff = 2,
+  numberOfTimesToPlayCullRiff = 2,
+  numberOfGrowRiffsPerGrowthPeriodRiff = 2,
 }): ScoreState[] {
   var random = seedrandom(seed);
   var prob = Probable({ random });
@@ -43,13 +41,8 @@ export function composeGeneticParts({
     const cull = genIndex % 2 === 0;
 
     if (prevIndex < 0) {
-      // 0th generation is just the initial riff in the main voice and rests in the others.
       for (let i = 0; i < numberOfTimesToPlayCullRiff; ++i) {
-        gens.push(
-          [initialRiff.slice()].concat(
-            range(numberOfParts - 1).map(() => initialRiff.map(() => undefined))
-          )
-        );
+        gens.push(range(numberOfParts).map(() => growNewRiff(5)));
       }
       return gens;
     }
@@ -63,9 +56,19 @@ export function composeGeneticParts({
         gens.push(gen.slice());
       }
     } else {
-      gen.forEach(growInRiffHoles);
-      for (let i = 0; i < numberOfTimesToPlayGrowRiff; ++i) {
-        gens.push(gen.slice());
+      for (let i = 0; i < numberOfGrowRiffsPerGrowthPeriodRiff; ++i) {
+        gen = gen.slice();
+        if (genIndex % 4 === 0) {
+          const changeFactor = prob.pick(guideDiamond.tonalityDiamondPitches);
+          if (prob.roll(2) === 0) {
+            gen[0] = gen[0].map((pitch) => pitch / changeFactor);
+          } else {
+            gen[0] = gen[0].map((pitch) => pitch * changeFactor);
+          }
+        }
+        gen.forEach(growInRiffHoles);
+        //gen.push(growNewRiff(gen[0].length));
+        gens.push(gen);
       }
     }
 
@@ -75,15 +78,26 @@ export function composeGeneticParts({
   function cullPitchesInChordsAcrossRiffstack(riffStack: RiffStack) {
     for (let eventIndex = 0; eventIndex < riffStack[0].length; ++eventIndex) {
       let chord = riffStack.map((riff) => riff[eventIndex]);
-      let relationships = getPossibleRelationships({ diamondRatios, chord });
+      let relationships = getPossibleRelationships({
+        diamondRatios: guideDiamond.diamondRatios,
+        chord,
+        //filterPitchIndex: 0, // Only consider relationships with the root.
+      });
       console.log('relationships', relationships);
-      // TODO: Do threshold-based thing instead of top-n?
-      relationships.sort(compareWorseness);
-      for (let i = 0; i < Math.min(2, relationships.length); ++i) {
-        let rel = relationships[i];
-        // TODO: Don't cull them if they're "good enough".
-        riffStack[rel.chordIndexes[0]][eventIndex] = undefined;
-        riffStack[rel.chordIndexes[1]][eventIndex] = undefined;
+      let goodRelationships = relationships.filter(
+        (rel) => rel.weightedDistance < 0.3
+      );
+      let goodIndexes = [];
+      if (goodRelationships.length > 0) {
+        let bestRelationship = goodRelationships.sort(compareGoodness)[0];
+        //console.log('bestRelationship', bestRelationship);
+        goodIndexes = goodIndexes.concat(bestRelationship.chordIndexes);
+      }
+      for (let stackIndex = 0; stackIndex < riffStack.length; ++stackIndex) {
+        if (goodIndexes.includes(stackIndex)) {
+          continue;
+        }
+        riffStack[stackIndex][eventIndex] = undefined;
       }
     }
   }
@@ -91,10 +105,20 @@ export function composeGeneticParts({
   function growInRiffHoles(riff: Riff) {
     for (let i = 0; i < riff.length; ++i) {
       const rate = riff[i];
-      if (isNaN(rate)) {
-        riff[i] = prob.roll(2) + prob.roll(1000) / 1000;
+      if (
+        isNaN(rate) &&
+        prob.roll(numberOfGrowRiffsPerGrowthPeriodRiff) === 0
+      ) {
+        //riff[i] = prob.roll(2) + prob.roll(1000) / 1000;
+        riff[i] = prob.pick(selectionDiamond.tonalityDiamondPitches);
       }
     }
+  }
+
+  function growNewRiff(len): Riff {
+    return range(len).map(() =>
+      prob.pick(selectionDiamond.tonalityDiamondPitches)
+    );
   }
 
   function getStatesForRiffStack(riffStack: RiffStack): ScoreState[] {

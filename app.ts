@@ -117,7 +117,7 @@ async function followRoute({
       sampleBuffer: buffers[sampleIndex],
       mainOutNode,
       constantEnvelopeLength: 1.0,
-      envelopeCurve: new Float32Array([0, 0.5, 1]),
+      //envelopeCurve: new Float32Array([0, 0.5, 1]),
       fadeLengthFactor: 1,
       idScoreEvent(event) {
         return event.id;

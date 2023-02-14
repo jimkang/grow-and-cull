@@ -5,9 +5,11 @@ import curry from 'lodash.curry';
 export function getPossibleRelationships({
   diamondRatios,
   chord,
+  filterPitchIndex,
 }: {
   diamondRatios: Ratio[];
   chord: number[];
+  filterPitchIndex?: number;
 }): Relationship[] {
   return chord.reduce(addRelationships, []);
 
@@ -17,6 +19,9 @@ export function getPossibleRelationships({
     pitchIndex: number
   ) {
     for (let i = pitchIndex + 1; i < chord.length; ++i) {
+      if (!isNaN(filterPitchIndex) && filterPitchIndex !== i) {
+        continue;
+      }
       const otherPitch = chord[i];
       let pair = [pitch, otherPitch].sort(compareNumbers);
       let ratioObj = factorDown({ numerator: pair[0], denominator: pair[1] });
@@ -95,6 +100,13 @@ function invertRatio(ratio: Ratio): Ratio {
 
 export function compareWorseness(a: Relationship, b: Relationship) {
   if (a.weightedDistance > b.weightedDistance) {
+    return -1;
+  }
+  return 1;
+}
+
+export function compareGoodness(a: Relationship, b: Relationship) {
+  if (a.weightedDistance < b.weightedDistance) {
     return -1;
   }
   return 1;
