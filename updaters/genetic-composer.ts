@@ -3,7 +3,13 @@ import { range } from 'd3-array';
 //import { scaleLinear } from 'd3-scale';
 import { createProbable as Probable } from 'probable';
 import seedrandom from 'seedrandom';
-import { ScoreState, ScoreEvent, Riff, RiffStack } from '../types';
+import {
+  ScoreState,
+  ScoreEvent,
+  Riff,
+  RiffStack,
+  Relationship,
+} from '../types';
 import curry from 'lodash.curry';
 import cloneDeep from 'lodash.clonedeep';
 
@@ -42,14 +48,29 @@ export function composeGeneticParts({
     var gen = cloneDeep(prevGen);
 
     if (cull) {
-      // TODO: Judge and cull.
+      cullPitchesInChordsAcrossRiffstack(gen);
     } else {
-      // Fill in holes.
       gen.forEach(growInRiffHoles);
     }
 
     gens.push(gen);
     return gens;
+  }
+
+  function cullPitchesInChordsAcrossRiffstack(riffStack: RiffStack) {
+    for (let eventIndex = 0; eventIndex < riffStack[0].length; ++eventIndex) {
+      let chord = riffStack.map((riff) => riff[eventIndex]);
+      let relationships = getPossibleRelationships(chord);
+      console.log('relationships', relationships);
+      // TODO: Do threshold-based thing instead of top-n?
+      //relationships.sort(comparePlatonicness);
+      //bestRelationship = relationships[0];
+      //bestRelationship.sort(compareOffness);
+      //for (let i = 0; i < 2; i++) {
+      //// TODO: Don't cull them if they're "good enough".
+      //riffStack[bestRelationship[i].chordIndex][eventIndex] = undefined;
+      //}
+    }
   }
 
   function growInRiffHoles(riff: Riff) {

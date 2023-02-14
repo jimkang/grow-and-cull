@@ -41,3 +41,15 @@ export interface PlayEvent {
 
 export type Riff = number[];
 export type RiffStack = Riff[];
+
+export interface Ratio {
+  numerator: number;
+  denominator: number;
+}
+
+export interface Relationship {
+  pair: number[];
+  ratio: Ratio;
+  closestDiamondRatio: Ratio;
+  distance: number;
+}
