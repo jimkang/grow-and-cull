@@ -24,6 +24,7 @@ export function getPossibleRelationships(chord: number[]): Relationship[] {
 
       let rel: Relationship = {
         pair,
+        chordIndexes: [pitchIndex, i],
         ratio: ratioObj,
         closestDiamondRatio,
         distance,

@@ -12,6 +12,7 @@ import {
 } from '../types';
 import curry from 'lodash.curry';
 import cloneDeep from 'lodash.clonedeep';
+import { getPossibleRelationships } from '../tasks/relationships';
 
 export function composeGeneticParts({
   numberOfParts,

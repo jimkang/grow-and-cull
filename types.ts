@@ -49,6 +49,7 @@ export interface Ratio {
 
 export interface Relationship {
   pair: number[];
+  chordIndexes: number[];
   ratio: Ratio;
   closestDiamondRatio: Ratio;
   distance: number;
