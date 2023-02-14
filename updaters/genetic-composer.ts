@@ -19,6 +19,8 @@ export function composeGeneticParts({
   // what's already played.
   initialRiff = [1, 0.999, ((16 / 9) * 1) / 2, 6 / 5, 1.001],
   numberOfGenerations = 4,
+  numberOfTimesToPlayCullRiff = 3,
+  numberOfTimesToPlayGrowRiff = 2,
 }): ScoreState[] {
   var prob = Probable({ random: seedrandom(seed) });
 
@@ -49,11 +51,16 @@ export function composeGeneticParts({
 
     if (cull) {
       cullPitchesInChordsAcrossRiffstack(gen);
+      for (let i = 0; i < numberOfTimesToPlayCullRiff; ++i) {
+        gens.push(gen);
+      }
     } else {
       gen.forEach(growInRiffHoles);
+      for (let i = 0; i < numberOfTimesToPlayGrowRiff; ++i) {
+        gens.push(gen);
+      }
     }
 
-    gens.push(gen);
     return gens;
   }
 

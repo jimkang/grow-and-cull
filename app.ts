@@ -8,7 +8,12 @@ import { Ticker } from './updaters/ticker';
 import { SampleDownloader } from './tasks/sample-downloader';
 import RandomId from '@jimkang/randomid';
 import { ScoreDirector } from './updaters/score-director';
-import { defaultSecondsPerTick, sampleFilenames, ticksPerRiff } from './consts';
+import {
+  defaultSecondsPerTick,
+  sampleFilenames,
+  ticksPerRiff,
+  repeatsPerRiff,
+} from './consts';
 import { composeGeneticParts } from './updaters/genetic-composer';
 import { renderEventDirection } from './renderers/render-event-direction';
 import { ScoreState } from './types';
@@ -44,7 +49,7 @@ async function followRoute({
     return;
   }
 
-  const totalTicks = genCount * ticksPerRiff;
+  const totalTicks = genCount * ticksPerRiff * repeatsPerRiff;
 
   var { error, values } = await ep(getCurrentContext);
   if (error) {
