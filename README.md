@@ -1,4 +1,4 @@
-# circle-of-life-and-death
+# grow-and-cull
 
 Melodies constructed genetically.
 

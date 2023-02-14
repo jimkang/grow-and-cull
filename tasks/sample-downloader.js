@@ -3,7 +3,7 @@ import oknok from 'oknok';
 import ContextKeeper from 'audio-context-singleton';
 
 const cdnSampleBaseURL =
-  'https://smidgeo.nyc3.cdn.digitaloceanspaces.com/circle-of-life-and-death/samples';
+  'https://smidgeo.nyc3.cdn.digitaloceanspaces.com/grow-and-cull/samples';
 const localSampleBaseURL = 'samples';
 
 var { getCurrentContext } = ContextKeeper();

@@ -11,7 +11,7 @@ import {
 } from '../tasks/relationships';
 import { TonalityDiamond } from '../tonality-diamond';
 
-var selectionDiamond = TonalityDiamond(6);
+var selectionDiamond = TonalityDiamond(15);
 var guideDiamond = TonalityDiamond(5);
 
 export function composeGeneticParts({

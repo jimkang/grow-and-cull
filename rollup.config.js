@@ -17,11 +17,11 @@ var configs = [
 ]
   //.concat(
   //vats.map((v) => ({
-  //input: `circle-of-life-and-deaths/${v}/${v}-circle-of-life-and-death.js`,
-  //outputFile: `circle-of-life-and-deaths/${v}/${v}-circle-of-life-and-death-bundle.js`,
-  //reloadPath: `circle-of-life-and-deaths/${v}`,
+  //input: `grow-and-culls/${v}/${v}-grow-and-cull.js`,
+  //outputFile: `grow-and-culls/${v}/${v}-grow-and-cull-bundle.js`,
+  //reloadPath: `grow-and-culls/${v}`,
   //serve: process.env.APP === v && serve,
-  //serveOpts: { rootDir: '.', serveDir: `circle-of-life-and-deaths/${v}`, port: 6001 },
+  //serveOpts: { rootDir: '.', serveDir: `grow-and-culls/${v}`, port: 6001 },
   //}))
   //)
   .map(createConfig);

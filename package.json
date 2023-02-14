@@ -1,5 +1,5 @@
 {
-  "name": "circle-of-life-and-death",
+  "name": "grow-and-cull",
   "version": "1.0.0",
   "description": "Melodies constructed genetically.",
   "main": "index.js",
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:jimkang/circle-of-life-and-death.git"
+    "url": "git@github.com:jimkang/grow-and-cull.git"
   },
   "keywords": [],
   "author": "Jim Kang",
   "license": "Polyform Noncommercial License 1.0",
   "bugs": {
-    "url": "https://github.com/jimkang/circle-of-life-and-death/issues"
+    "url": "https://github.com/jimkang/grow-and-cull/issues"
   },
-  "homepage": "https://github.com/jimkang/circle-of-life-and-death",
+  "homepage": "https://github.com/jimkang/grow-and-cull",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^19.0.0",
     "@rollup/plugin-json": "^4.1.0",
